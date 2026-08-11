@@ -13,3 +13,76 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum DocumentStatus {
+  DRAFT
+  FINALIZED
+}
+
+enum DiscountType {
+  NONE
+  FIXED
+  PERCENT
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  documents    Document[]
+}
+
+model Document {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
+  title     String
+  customer  String
+  issueDate DateTime
+  status    DocumentStatus @default(DRAFT)
+
+  lineItems LineItem[]
+
+  // server side only. Not accepted from client side
+  subtotalCents      Int @default(0)
+  totalDiscountCents Int @default(0)
+  totalTaxCents      Int @default(0)
+  grandTotalCents    Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, issueDate])
+}
+
+model LineItem {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  description    String
+  quantity       Int // >= 1
+  unitPriceCents Int // >= 0
+
+  discountType  DiscountType @default(NONE)
+  // Meaning depends on discountType:
+  //  - FIXED:   discountValue is a cents amount
+  //  - PERCENT: discountValue is basis points (e.g. 1000 = 10%)
+  //  - NONE:    discountValue is 0 and ignored
+  discountValue Int          @default(0)
+
+  taxBps Int @default(0) // basis points, e.g. 500 = 5%
+
+  // server side only. Not accepted from client side
+  subtotalCents       Int @default(0)
+  discountAmountCents Int @default(0)
+  taxAmountCents      Int @default(0)
+  lineTotalCents      Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId])
+}
