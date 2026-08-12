@@ -16,12 +16,6 @@ import {
 } from "@/components/documents/line-item-form-fields";
 import type { Document, LineItem } from "@/types";
 
-function discountLabel(item: LineItem) {
-    if (item.discountType === "NONE") return "—";
-    if (item.discountType === "FIXED") return formatCents(item.discountValue);
-    return `${item.discountValue / 100}%`;
-}
-
 export function LineItemTable({
     documentId,
     lineItems,
@@ -108,8 +102,10 @@ export function LineItemTable({
                         <TableHead>Description</TableHead>
                         <TableHead className="text-right">Qty</TableHead>
                         <TableHead className="text-right">Unit price</TableHead>
-                        <TableHead className="text-right">Discount</TableHead>
-                        <TableHead className="text-right">Tax</TableHead>
+                        <TableHead className="text-right">Subtotal</TableHead>
+                        <TableHead className="text-right">Discount amt</TableHead>
+                        <TableHead className="text-right">After discount</TableHead>
+                        <TableHead className="text-right">Tax amt</TableHead>
                         <TableHead className="text-right">Line total</TableHead>
                         {editable && <TableHead className="w-24" />}
                     </TableRow>
@@ -117,7 +113,7 @@ export function LineItemTable({
                 <TableBody>
                     {lineItems.length === 0 && (
                         <TableRow>
-                            <TableCell colSpan={editable ? 7 : 6} className="text-center text-muted-foreground">
+                            <TableCell colSpan={editable ? 9 : 8} className="text-center text-muted-foreground">
                                 No line items yet.
                             </TableCell>
                         </TableRow>
@@ -127,8 +123,12 @@ export function LineItemTable({
                             <TableCell className="font-medium">{item.description}</TableCell>
                             <TableCell className="text-right">{item.quantity}</TableCell>
                             <TableCell className="text-right">{formatCents(item.unitPriceCents)}</TableCell>
-                            <TableCell className="text-right">{discountLabel(item)}</TableCell>
-                            <TableCell className="text-right">{item.taxBps ? `${item.taxBps / 100}%` : "—"}</TableCell>
+                            <TableCell className="text-right">{formatCents(item.subtotalCents)}</TableCell>
+                            <TableCell className="text-right">{formatCents(item.discountAmountCents)}</TableCell>
+                            <TableCell className="text-right">
+                                {formatCents(item.subtotalCents - item.discountAmountCents)}
+                            </TableCell>
+                            <TableCell className="text-right">{formatCents(item.taxAmountCents)}</TableCell>
                             <TableCell className="text-right">{formatCents(item.lineTotalCents)}</TableCell>
                             {editable && (
                                 <TableCell className="text-right">
