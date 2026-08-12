@@ -4,7 +4,7 @@ import { COOKIE_NAME } from "@/lib/auth/session";
 
 const PROTECTED_PREFIXES = ["/documents", "/reports"];
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
     const isProtected = PROTECTED_PREFIXES.some((p) =>
         req.nextUrl.pathname.startsWith(p)
     );
