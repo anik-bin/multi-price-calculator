@@ -16,7 +16,7 @@ export interface LineItemInput {
     unitPriceCents: number; // integer >=0
     discountType: DiscountType;
     discountValue: number; // cents if FIXED, basis points if PERCENT, 0 if NONE
-    taxBPS: number;
+    taxBps: number;
 }
 
 export interface LineItemResult {
@@ -75,13 +75,13 @@ export function calculateDiscountAmount(
 
 export function calculateTaxAmount(
     afterDiscountCents: number,
-    taxBPS: number
+    taxBps: number
 ): number {
-    if (!Number.isInteger(taxBPS) || taxBPS < 0 || taxBPS > BPS_DENOMINATOR) {
+    if (!Number.isInteger(taxBps) || taxBps < 0 || taxBps > BPS_DENOMINATOR) {
         throw new Error("Tax BPS must be between 0 and 10000");
     }
 
-    return roundCents((afterDiscountCents * taxBPS) / BPS_DENOMINATOR);
+    return roundCents((afterDiscountCents * taxBps) / BPS_DENOMINATOR);
 }
 
 /* Calculate all derived values for a single line item.
@@ -89,7 +89,7 @@ export function calculateTaxAmount(
 */
 
 export function calculateLineItem(input: LineItemInput): LineItemResult {
-    const { quantity, unitPriceCents, discountType, discountValue, taxBPS } = input;
+    const { quantity, unitPriceCents, discountType, discountValue, taxBps } = input;
 
     if (!Number.isInteger(quantity) || quantity < 1) {
         throw new Error("Quantity must be an integer and >= 1");
@@ -108,7 +108,7 @@ export function calculateLineItem(input: LineItemInput): LineItemResult {
     );
 
     const afterDiscountCents = subtotalCents - discountAmountCents;
-    const taxAmountCents = calculateTaxAmount(afterDiscountCents, taxBPS);
+    const taxAmountCents = calculateTaxAmount(afterDiscountCents, taxBps);
     const lineTotalCents = afterDiscountCents + taxAmountCents;
 
     return {
