@@ -120,21 +120,21 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                 </CardContent>
             </Card>
 
-            <Card className="max-w-sm self-end">
-                <CardContent className="flex flex-col gap-1 text-sm">
-                    <div className="flex justify-between">
+            <Card className="w-80 self-end">
+                <CardContent className="flex flex-col gap-2 text-sm">
+                    <div className="flex justify-between gap-4">
                         <span className="text-muted-foreground">Subtotal</span>
                         <span>{formatCents(doc.subtotalCents)}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-4">
                         <span className="text-muted-foreground">Discount</span>
                         <span>-{formatCents(doc.totalDiscountCents)}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-4">
                         <span className="text-muted-foreground">Tax</span>
                         <span>+{formatCents(doc.totalTaxCents)}</span>
                     </div>
-                    <div className="flex justify-between border-t pt-1 font-medium">
+                    <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
                         <span>Grand total</span>
                         <span>{formatCents(doc.grandTotalCents)}</span>
                     </div>
