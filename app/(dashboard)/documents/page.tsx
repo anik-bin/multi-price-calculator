@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
 import { formatCents, formatDate } from "@/lib/format";
 import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/status-badge";
 import type { Document } from "@/types";
@@ -36,34 +37,50 @@ export default function DocumentsPage() {
             )}
 
             {documents !== null && documents.length > 0 && (
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Title</TableHead>
-                            <TableHead>Customer</TableHead>
-                            <TableHead>Issue date</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Grand total</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {documents.map((doc) => (
-                            <TableRow
-                                key={doc.id}
-                                className="cursor-pointer"
-                                onClick={() => router.push(`/documents/${doc.id}`)}
-                            >
-                                <TableCell className="font-medium">{doc.title}</TableCell>
-                                <TableCell>{doc.customer}</TableCell>
-                                <TableCell>{formatDate(doc.issueDate)}</TableCell>
-                                <TableCell>
-                                    <StatusBadge status={doc.status} />
-                                </TableCell>
-                                <TableCell className="text-right">{formatCents(doc.grandTotalCents)}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <Card>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-primary/10 hover:bg-primary/10">
+                                    <TableHead className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        Title
+                                    </TableHead>
+                                    <TableHead className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        Customer
+                                    </TableHead>
+                                    <TableHead className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        Issue date
+                                    </TableHead>
+                                    <TableHead className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        Status
+                                    </TableHead>
+                                    <TableHead className="text-right text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        Grand total
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {documents.map((doc) => (
+                                    <TableRow
+                                        key={doc.id}
+                                        className="cursor-pointer"
+                                        onClick={() => router.push(`/documents/${doc.id}`)}
+                                    >
+                                        <TableCell className="font-medium">{doc.title}</TableCell>
+                                        <TableCell>{doc.customer}</TableCell>
+                                        <TableCell>{formatDate(doc.issueDate)}</TableCell>
+                                        <TableCell>
+                                            <StatusBadge status={doc.status} />
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {formatCents(doc.grandTotalCents)}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             )}
         </div>
     );
