@@ -135,3 +135,23 @@
     @apply font-heading;
   }
 }
+
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  html {
+    font-size: 13px;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { api, ApiError } from "@/lib/api-client";
@@ -94,6 +95,15 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                     {draft && (
                         <Button onClick={handleFinalize} disabled={busy}>
                             Finalize
+                        </Button>
+                    )}
+                    {!draft && (
+                        <Button
+                            variant="outline"
+                            nativeButton={false}
+                            render={<Link href={`/documents/${id}/print`} target="_blank" />}
+                        >
+                            Print
                         </Button>
                     )}
                     {!draft && (
