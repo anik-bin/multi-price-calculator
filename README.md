@@ -18,7 +18,7 @@ zod for validation, JWT + bcrypt for auth.
 
 ```bash
 git clone <this-repo>
-cd crossval_assignment
+cd multi-price-calculator
 npm install
 ```
 
